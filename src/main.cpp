@@ -1,4 +1,4 @@
-#include <Windows.h>
+#include "window.hpp"
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR lpCmdLine, INT nCmdShow)
@@ -7,6 +7,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
-	
+
+	Window::init();
+	Window::loop();
+	Window::destroy();
+
 	return 0;
 }
