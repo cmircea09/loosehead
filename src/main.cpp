@@ -8,9 +8,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
-	Window::init();
-	Window::loop();
-	Window::destroy();
+	Window app(640, 480, "loosehead");
 
-	return 0;
+	MSG msg;
+	ZeroMemory(&msg, sizeof(msg));
+
+	while(msg.message != WM_QUIT) {
+		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		} else {
+			/* update & draw code here */
+		}
+	}
+
+	return msg.wParam;
 }

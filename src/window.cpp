@@ -1,82 +1,101 @@
 #include "window.hpp"
 
-static HWND window = nullptr;
+Window::WC Window::WC::_wc;
 
-LRESULT WINAPI wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-	switch(msg) {
-		case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
-	}
-
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-}
-
-void Window::init()
+Window::WC::WC() : _instance(GetModuleHandle(nullptr))
 {
 	WNDCLASSEX wc;
+	ZeroMemory(&wc, sizeof(wc));
+
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_OWNDC;
-	wc.lpfnWndProc = wnd_proc;
+	wc.lpfnWndProc = message_setup;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = GetModuleHandle(nullptr);
+	wc.hInstance = instance();
 	wc.hIcon = nullptr;
 	wc.hCursor = nullptr;
-	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);;
+	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
-	wc.lpszClassName = "LPSZ_CLASS_NAME";
+	wc.lpszClassName = name();
 	wc.hIconSm = nullptr;
 
 	RegisterClassEx(&wc);
+}
 
-	RECT rt = {0, 0, 640, 480};
-	AdjustWindowRect(&rt, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, 0);
+Window::WC::~WC()
+{
+	UnregisterClass(name(), instance());
+}
 
-	int w = rt.right - rt.left;
-	int h = rt.bottom - rt.top;
+const char* Window::WC::name()
+{
+	return _name;
+}
 
-	window = CreateWindow(
-		"LPSZ_CLASS_NAME",
-		"loosehead",
+HINSTANCE Window::WC::instance()
+{
+	return _wc._instance;
+}
+
+Window::Window(int width, int height, const char* name)
+{
+	RECT rt = {0, 0, width, height};
+        AdjustWindowRect(&rt, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, 0);
+
+        int w = rt.right - rt.left;
+        int h = rt.bottom - rt.top;
+
+	_window = CreateWindow(
+		WC::name(),
+		name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		w,
 		h,
-		NULL,
-		NULL,
-		wc.hInstance,
-		NULL
+		nullptr,
+		nullptr,
+		WC::instance(),
+		this
 	);
 
-	ShowWindow(window, SW_SHOWDEFAULT);
-	UpdateWindow(window);
+	ShowWindow(_window, SW_SHOWDEFAULT);
 }
 
-void Window::loop()
+Window::~Window()
 {
-	MSG msg;
-	ZeroMemory(&msg, sizeof(msg));
+	DestroyWindow(_window);
+}
 
-	while(msg.message != WM_QUIT) {
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		} else {
-			/* update & draw code here*/
-		}
+LRESULT CALLBACK Window::message_setup(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	if(msg == WM_NCCREATE) {
+		const CREATESTRUCTW* const create = reinterpret_cast<CREATESTRUCTW*>(lparam);
+		Window* const t = static_cast<Window*>(create->lpCreateParams);
+		
+		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(t));
+		SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Window::message_thunk));
+		
+		return t->wnd_proc(hwnd, msg, wparam, lparam);
 	}
+
+	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-void Window::destroy()
+LRESULT CALLBACK Window::message_thunk(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	DestroyWindow(window);
-	UnregisterClass("LPSZ_CLASS_NAME", GetModuleHandle(NULL));
+	Window* const t = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	return t->wnd_proc(hwnd, msg, wparam, lparam);
 }
 
-HWND Window::handle() 
+LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	return window;
+	switch(msg) {
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
