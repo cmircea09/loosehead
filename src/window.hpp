@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include "strict_win.hpp"
 
 namespace Window
 {
