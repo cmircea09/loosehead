@@ -1,6 +1,7 @@
 #pragma once
 
 #include "strict_win.hpp"
+#include "timer.hpp"
 
 class Window
 {
@@ -24,6 +25,7 @@ public:
         Window(int width, int height, const char* title);
         ~Window();
 
+        void set_title(const char* title);
 private:
         HWND _window;
 

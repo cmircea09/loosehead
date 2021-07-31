@@ -99,3 +99,8 @@ LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpa
 
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
+
+void Window::set_title(const char* title)
+{
+	SetWindowText(_window, title);
+}
