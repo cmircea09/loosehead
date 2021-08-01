@@ -12,6 +12,8 @@ public:
 	void end_frame();
 	void clear_buffer(float r, float g, float b);
 
+	void draw_triangle_test();
+
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device>_device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>_swap_chain;

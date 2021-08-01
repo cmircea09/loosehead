@@ -23,7 +23,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			window.timer.tick();
 			window.calculate_frame_stats();
 
-			window.graphics().clear_buffer(0.0f, 0.0f, 0.0f);
+			const float c = sin(window.timer.total_time()) / 2.0f + 0.5f;
+
+			window.graphics().clear_buffer(c, c, 1.0f);
+
+			window.graphics().draw_triangle_test();
+
 			window.graphics().end_frame();
 		}
 	}

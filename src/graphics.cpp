@@ -1,6 +1,9 @@
 #include "graphics.hpp"
+#include <d3dcompiler.h>
+#include <vector>
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 Graphics::Graphics(void* window)
 {
@@ -52,4 +55,84 @@ void Graphics::clear_buffer(float r, float g, float b)
 {
 	const float color[] = { r, g, b, 1.0f };
 	_context->ClearRenderTargetView(_target_view.Get(), color);
+}
+
+void Graphics::draw_triangle_test()
+{
+	struct Vertex
+	{
+		float x;
+		float y;
+	};
+
+	const Vertex vertices[] = 
+	{
+		{ 0.0f, 0.5f },
+		{ 0.5f, -0.5f },
+		{ -0.5f, -0.5f }
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer>vertex_buffer;
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+	bd.ByteWidth = sizeof(vertices);
+	bd.StructureByteStride = sizeof(Vertex);
+
+	D3D11_SUBRESOURCE_DATA sd;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = vertices;
+
+	_device->CreateBuffer(&bd, &sd, &vertex_buffer);
+
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	_context->IASetVertexBuffers(0u, 1u, vertex_buffer.GetAddressOf(), &stride, &offset);
+
+
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader;
+	Microsoft::WRL::ComPtr<ID3DBlob> blob;
+	D3DReadFileToBlob(L"pixel_shader.cso", &blob);
+	_device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &pixel_shader);	
+	_context->PSSetShader(pixel_shader.Get(), nullptr, 0u);
+
+
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader;
+	D3DReadFileToBlob(L"vertex_shader.cso", &blob);
+	_device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vertex_shader);	
+	_context->VSSetShader(vertex_shader.Get(), nullptr, 0u);
+
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] = 
+	{
+		{ "Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	_device->CreateInputLayout(
+		ied,
+		(UINT)std::size(ied),
+		blob->GetBufferPointer(),
+		blob->GetBufferSize(),
+		&input_layout
+	);
+
+	_context->IASetInputLayout(input_layout.Get());
+	_context->OMSetRenderTargets(1u, _target_view.GetAddressOf(), nullptr);
+	_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	D3D11_VIEWPORT vp;
+	vp.Width = 640;
+	vp.Height = 480;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+
+	_context->RSSetViewports(1u, &vp);
+
+	_context->Draw((UINT)std::size(vertices), 0u);
 }
