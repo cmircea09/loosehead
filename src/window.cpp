@@ -61,6 +61,8 @@ Window::Window(int width, int height, const char* name)
 	);
 
 	ShowWindow(_window, SW_SHOWDEFAULT);
+
+	_gfx = std::make_unique<Graphics>(_window);
 }
 
 Window::~Window()
@@ -103,4 +105,9 @@ LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpa
 void Window::set_title(const char* title)
 {
 	SetWindowText(_window, title);
+}
+
+Graphics& Window::graphics()
+{
+	return *_gfx;
 }
