@@ -39,6 +39,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				frames = 0;
 				time_elapsed += 1.0f;
 			}
+
+			window.graphics().clear_buffer(0.0f, 0.0f, 0.0f);
+			window.graphics().end_frame();
 		}
 	}
 

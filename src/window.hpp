@@ -28,9 +28,10 @@ public:
 	Window(int width, int height, const char* title);
 	~Window();
 
+	void set_title(const char* title);
+
 	Graphics& graphics();
 
-	void set_title(const char* title);
 private:
 	HWND _window;
 	std::unique_ptr<Graphics> _gfx;

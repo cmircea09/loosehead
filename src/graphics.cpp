@@ -32,23 +32,26 @@ Graphics::Graphics(void* window)
 		0,
 		D3D11_SDK_VERSION,
 		&sd,
-		&swap_chain,
-		&device,
+		&_swap_chain,
+		&_device,
 		nullptr,
-		&context
+		&_context
 	);
 
 	ID3D11Resource* back_buffer = nullptr;
-	swap_chain->GetBuffer(0, __uuidof(ID3D11Resource),reinterpret_cast<void**>(&back_buffer));
-	device->CreateRenderTargetView(back_buffer, nullptr, &target_view);
+	_swap_chain->GetBuffer(0, __uuidof(ID3D11Resource),reinterpret_cast<void**>(&back_buffer));
+	_device->CreateRenderTargetView(back_buffer, nullptr, &_target_view);
 
 	back_buffer->Release();
 }
 
-Graphics::~Graphics()
+void Graphics::end_frame()
 {
-	target_view->Release();
-	context->Release();
-	swap_chain->Release();
-	device->Release();
+	_swap_chain->Present(1u, 0u);
+}
+
+void Graphics::clear_buffer(float r, float g, float b)
+{
+	const float color[] = { r, g, b, 1.0f };
+	_context->ClearRenderTargetView(_target_view.Get(), color);
 }
