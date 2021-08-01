@@ -38,11 +38,9 @@ Graphics::Graphics(void* window)
 		&_context
 	);
 
-	ID3D11Resource* back_buffer = nullptr;
-	_swap_chain->GetBuffer(0, __uuidof(ID3D11Resource),reinterpret_cast<void**>(&back_buffer));
-	_device->CreateRenderTargetView(back_buffer, nullptr, &_target_view);
-
-	back_buffer->Release();
+	Microsoft::WRL::ComPtr<ID3D11Resource>back_buffer;
+	_swap_chain->GetBuffer(0, __uuidof(ID3D11Resource), &back_buffer);
+	_device->CreateRenderTargetView(back_buffer.Get(), nullptr, &_target_view);
 }
 
 void Graphics::end_frame()

@@ -28,7 +28,10 @@ public:
 	Window(int width, int height, const char* title);
 	~Window();
 
+	Timer timer;
+
 	void set_title(const char* title);
+	void calculate_frame_stats();
 
 	Graphics& graphics();
 
