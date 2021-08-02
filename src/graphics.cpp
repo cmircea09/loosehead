@@ -1,9 +1,11 @@
 #include "graphics.hpp"
 #include <d3dcompiler.h>
-#include <vector>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
+#define GRAPHICS_EXCEPT_NO_INFO(hr) Graphics::HrException(__LINE__, __FILE__, (hr))
+#define GRAPHICS_THROW_NO_INFO(hr_call) if(FAILED(hr = (hr_call))) throw Graphics::HrException(__LINE__, __FILE__, hr)
 
 Graphics::Graphics(void* window)
 {
