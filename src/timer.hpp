@@ -1,6 +1,5 @@
 #pragma once
 
-#include "strict_win.hpp"
 #include <cinttypes>
 
 class Timer 

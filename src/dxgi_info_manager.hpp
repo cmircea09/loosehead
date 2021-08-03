@@ -1,6 +1,5 @@
 #pragma once
 
-#include "strict_win.hpp"
 #include <wrl.h>
 #include <vector>
 #include <string>

@@ -1,7 +1,11 @@
 #pragma once
 
 /* target Windows 7 or later */
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #define _WIN32_WINNT 0x0601
+#pragma warning(pop)
+
 #include <sdkddkver.h>
 
 /* the following #defines disable a bunch of unused windows stuff */
@@ -40,5 +44,9 @@
 #define NOIMAGE
 #define NOTAPE
 
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #define STRICT
+#pragma warning(pop)
+
 #include <Windows.h>

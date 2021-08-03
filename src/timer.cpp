@@ -1,4 +1,5 @@
 #include "timer.hpp"
+#include "strict_win.hpp"
 
 Timer::Timer()
 {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "strict_win.hpp"
-#include "timer.hpp"
 #include "graphics.hpp"
-
+#include "timer.hpp"
+#include <optional>
 #include <memory>
 
 class Window
@@ -28,10 +28,9 @@ public:
 	Window(int width, int height, const char* title);
 	~Window();
 
-	Timer timer;
+	static std::optional<int> process_messages();
 
 	void set_title(const char* title);
-	void calculate_frame_stats();
 
 	Graphics& graphics();
 

@@ -1,6 +1,6 @@
 #include "dxgi_info_manager.hpp"
 #include "graphics.hpp"
-#include <dxgidebug.h>
+#include "strict_win.hpp"
 #include <memory>
 
 #pragma comment(lib, "dxguid.lib")
