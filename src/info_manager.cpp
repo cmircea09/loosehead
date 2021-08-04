@@ -1,4 +1,4 @@
-#include "dxgi_info_manager.hpp"
+#include "info_manager.hpp"
 #include "graphics.hpp"
 #include "strict_win.hpp"
 #include <memory>
@@ -7,7 +7,7 @@
 
 #define GRAPHICS_THROW_NO_INFO(hr_call) if(FAILED(hr = (hr_call))) throw Graphics::HrException(__LINE__, __FILE__, hr)
 
-DxgiInfoManager::DxgiInfoManager()
+InfoManager::InfoManager()
 {
 	typedef HRESULT (WINAPI* DXGIGetDebugInterface)(REFIID, void**);
 
@@ -20,12 +20,12 @@ DxgiInfoManager::DxgiInfoManager()
 	GRAPHICS_THROW_NO_INFO(dxgi_debug_interface(__uuidof(IDXGIInfoQueue), &_dxgi_info_queue));
 }
 
-void DxgiInfoManager::set()
+void InfoManager::set()
 {
 	_next = _dxgi_info_queue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
-std::vector<std::string> DxgiInfoManager::messages()
+std::vector<std::string> InfoManager::messages()
 {
 	std::vector<std::string> messages;
 	const auto end = _dxgi_info_queue->GetNumStoredMessages(DXGI_DEBUG_ALL);

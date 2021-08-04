@@ -11,9 +11,9 @@ Timer::Timer()
 	_curr_time = 0;
 	_stopped = false;
 
-	int64_t counts_per_sec;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&counts_per_sec);
-	_seconds_per_count = 1.0 / (double)counts_per_sec;
+	int64_t counts_per_second;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&counts_per_second);
+	_seconds_per_count = 1.0 / (double)counts_per_second;
 }
 
 float Timer::total_time()

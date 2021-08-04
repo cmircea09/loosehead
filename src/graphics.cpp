@@ -35,7 +35,6 @@ Graphics::Graphics(void* window)
 	sd.Flags = 0;
 
 	HRESULT hr;
-
 	GRAPHICS_THROW_INFO(D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,

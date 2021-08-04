@@ -2,10 +2,10 @@
 
 #include "strict_win.hpp"
 #include "exception.hpp"
+#include "info_manager.hpp"
 #include <d3d11.h>
 #include <wrl.h>
 #include <vector>
-#include "dxgi_info_manager.hpp"
 
 class Graphics
 {
@@ -18,8 +18,8 @@ public:
 	class HrException : public GraphicsException
 	{
 		public:
-			HrException(int line, const char* file,
-			HRESULT hr, std::vector<std::string> info_msgs = {}) noexcept;
+			HrException(int line, const char* file, HRESULT hr,
+			            std::vector<std::string> info_msgs = {}) noexcept;
 
 			const char* what() const noexcept override;;
 			const char* type() const noexcept override;;
@@ -37,7 +37,7 @@ public:
 	{
 		public:
 			InfoException(int line, const char* file, 
-			std::vector<std::string> info_msgs = {}) noexcept;;
+				      std::vector<std::string> info_msgs = {}) noexcept;;
 
 			const char* what() const noexcept override;;
 			const char* type() const noexcept override;;
@@ -64,11 +64,10 @@ public:
 
 	void end_frame();
 	void clear_buffer(float r, float g, float b);
-
 	void draw_triangle_test();
 
 private:
-	DxgiInfoManager _info_manager;
+	InfoManager _info_manager;
 
 	Microsoft::WRL::ComPtr<ID3D11Device>_device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>_swap_chain;

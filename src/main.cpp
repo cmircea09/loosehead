@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "timer.hpp"
 
 class Application
 {
@@ -59,11 +60,6 @@ void Application::do_frame()
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR lpCmdLine, INT nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hInstance);
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
-
 	try {
 		return Application{}.start();
 	}

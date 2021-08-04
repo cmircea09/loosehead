@@ -5,11 +5,11 @@
 #include <string>
 #include <dxgidebug.h>
 
-class DxgiInfoManager
+class InfoManager
 {
 public:
-	DxgiInfoManager();
-	~DxgiInfoManager() = default;
+	InfoManager();
+	~InfoManager() = default;
 
 	void set();
 	std::vector<std::string> messages();

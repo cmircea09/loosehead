@@ -44,17 +44,14 @@ Window::Window(int width, int height, const char* name)
 	RECT rt = {0, 0, width, height};
 	AdjustWindowRect(&rt, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, 0);
 
-        int w = rt.right - rt.left;
-        int h = rt.bottom - rt.top;
-
 	_window = CreateWindow(
 		WC::name(),
 		name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		w,
-		h,
+		rt.right - rt.left,
+		rt.bottom - rt.top,
 		nullptr,
 		nullptr,
 		WC::instance(),
@@ -62,7 +59,7 @@ Window::Window(int width, int height, const char* name)
 	);
 
 	ShowWindow(_window, SW_SHOWDEFAULT);
-
+	
 	_gfx = std::make_unique<Graphics>(_window);
 }
 

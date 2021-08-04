@@ -2,7 +2,6 @@
 
 #include "strict_win.hpp"
 #include "graphics.hpp"
-#include "timer.hpp"
 #include <optional>
 #include <memory>
 
