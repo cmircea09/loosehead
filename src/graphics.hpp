@@ -18,8 +18,7 @@ public:
 	class HrException : public GraphicsException
 	{
 		public:
-			HrException(int line, const char* file, HRESULT hr,
-			            std::vector<std::string> info_msgs = {}) noexcept;
+			HrException(int line, const char* file, HRESULT hr, std::vector<std::string> info_msgs = {}) noexcept;
 
 			const char* what() const noexcept override;;
 			const char* type() const noexcept override;;
@@ -36,8 +35,7 @@ public:
 	class InfoException : public GraphicsException
 	{
 		public:
-			InfoException(int line, const char* file, 
-				      std::vector<std::string> info_msgs = {}) noexcept;;
+			InfoException(int line, const char* file, std::vector<std::string> info_msgs = {}) noexcept;
 
 			const char* what() const noexcept override;;
 			const char* type() const noexcept override;;
@@ -64,7 +62,6 @@ public:
 
 	void end_frame();
 	void clear_buffer(float r, float g, float b);
-	void draw_triangle_test();
 
 private:
 	InfoManager _info_manager;

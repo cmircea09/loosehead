@@ -39,6 +39,5 @@ void Application::do_frame()
 
 	const float c = (float)sin(_timer.delta_time()) / 2.0f + 0.5f;
 	_window.graphics().clear_buffer(c, c, 1.0f);
-	_window.graphics().draw_triangle_test();
 	_window.graphics().end_frame();
 }

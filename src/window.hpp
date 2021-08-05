@@ -28,9 +28,7 @@ public:
 	~Window();
 
 	static std::optional<int> process_messages();
-
 	void set_title(const char* title);
-
 	Graphics& graphics();
 
 private:
