@@ -172,11 +172,10 @@ Graphics::HrException::HrException(
 const char* Graphics::HrException::what() const noexcept
 {
 	std::ostringstream oss;
-	oss << type() << "\n" << "[Error Code] 0x"
-	<< std::hex << std::uppercase << error_code()
-	<< std::dec << " (" << (unsigned long)(error_code())
-	<< " )" << "\n" << "[Error String] "<< error_string()
-	<< std::endl << "[Description] " << error_description() << "\n";
+	oss << type() << "\n" << "[Error Code] 0x" << std::hex << std::uppercase
+	    << error_code() << std::dec << " (" << (unsigned long)error_code()
+	    << " )" << "\n" << "[Error String] " << error_string()
+	    << std::endl << "[Description] " << error_description() << "\n";
 
 	if(!_info.empty())
 		oss << "\n[Error Info]\n" << error_info() << "\n\n";
@@ -237,8 +236,8 @@ Graphics::InfoException::InfoException(
 const char* Graphics::InfoException::what() const noexcept
 {
 	std::ostringstream oss;
-	oss << type() << "\n" << "\n[Error Info]\n" << error_info() << "\n\n";
-	oss << origin_string();
+	oss << type() << "\n" << "\n[Error Info]\n" << error_info() << "\n\n"
+	    << origin_string();
 
 	return (what_buffer = oss.str()).c_str();
 }
